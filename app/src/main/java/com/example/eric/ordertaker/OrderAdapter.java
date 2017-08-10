@@ -1,12 +1,11 @@
 package com.example.eric.ordertaker;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,25 +23,25 @@ import android.widget.Toast;
 import com.example.eric.ordertaker.Drinks.Drink;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by eric on 7/27/17.
  */
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHolder> {
+public class OrderAdapter extends ArrayAdapter<Drink> {
     public Context context;
-    public List<Drink> drinkList;
+//    public List<Drink> drinkList;
     public CardListener cardListener;
 
-    public OrderAdapter(Context context, List<Drink> drinkList, CardListener cardListener) {
+    public OrderAdapter(Context context, CardListener cardListener) {
+        super(context, R.layout.order_card);
         this.context = context;
-        this.drinkList = drinkList;
+//        this.drinkList = drinkList;
         this.cardListener = cardListener;
     }
 
-    public class CardViewHolder extends RecyclerView.ViewHolder {
+    public class CardViewHolder {
         public Spinner name_value, sugar_value, ice_value;
         public ArrayAdapter<CharSequence> nameAdapter, iceAdapter, sugarAdapter;
         public ImageButton voiceOrder;
@@ -52,7 +51,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
 
 
         public CardViewHolder(View view) {
-            super(view);
 
             name_value = view.findViewById(R.id.name_value);
             sugar_value = view.findViewById(R.id.sugar_value);
@@ -78,20 +76,23 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         }
     }
 
+    @NonNull
     @Override
-    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_card, parent, false);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final CardViewHolder holder;
 
-        return new CardViewHolder(itemView);
-    }
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.order_card, parent, false);
+            holder = new CardViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (CardViewHolder) convertView.getTag();
+        }
 
-    @SuppressLint("ResourceType")
-    @Override
-    public void onBindViewHolder(final CardViewHolder holder, final int position) {
-        final Drink drink = drinkList.get(position);
+        final Drink drink = getItem(position);
 
-        if(drink.initStatus == false){
+        if (drink.initStatus == false) {
             HashMap<String, Spinner> spinnerMap = new HashMap<>();
             spinnerMap.put("name", holder.name_value);
             spinnerMap.put("sugar", holder.sugar_value);
@@ -101,15 +102,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             adapterHashMap.put("sugar", holder.sugarAdapter);
             adapterHashMap.put("ice", holder.iceAdapter);
 
-            drink.init(context, spinnerMap, adapterHashMap);
-        }else{
-            holder.name_value.setSelection(holder.nameAdapter.getPosition(drink.name.getValue()));
-            holder.sugar_value.setSelection(holder.sugarAdapter.getPosition(drink.sugar.getValue()));
-            holder.ice_value.setSelection(holder.iceAdapter.getPosition(drink.ice.getValue()));
-            holder.spinSelector.setVisibility(drink.spinnerVisible);
-            holder.orderResult.setVisibility(drink.resultVisible);
-            holder.orderResult.setText(drink.getOrderresult());
-        }
+            drink.init(context, spinnerMap, adapterHashMap);}
+//        } else {
+//            holder.name_value.setSelection(holder.nameAdapter.getPosition(drink.name.getValue()));
+//            holder.sugar_value.setSelection(holder.sugarAdapter.getPosition(drink.sugar.getValue()));
+//            holder.ice_value.setSelection(holder.iceAdapter.getPosition(drink.ice.getValue()));
+//            holder.spinSelector.setVisibility(drink.spinnerVisible);
+//            holder.orderResult.setVisibility(drink.resultVisible);
+//            holder.orderResult.setText(drink.getOrderresult());
+//        }
 
         holder.name_value.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -158,16 +159,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         holder.confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("position",String.valueOf(position));
-                Log.d("positionad",String.valueOf(holder.getAdapterPosition()));
+                Log.d("position", String.valueOf(position));
                 holder.spinSelector.setVisibility(View.GONE);
                 String order = drink.getOrderresult();
                 holder.orderResult.setText(order);
                 holder.orderResult.setVisibility(View.VISIBLE);
                 drink.setSpinnerVisible(View.GONE);
                 drink.setResultVisible(View.VISIBLE);
-                Log.d("newCardadded1",String.valueOf(drink.newCardadded));
-                if(drink.newCardadded == false){
+                Log.d("newCardadded1", String.valueOf(drink.newCardadded));
+                if (drink.newCardadded == false) {
                     cardListener.addCard();
                     drink.cardadded();
                 }
@@ -178,8 +178,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         holder.resultLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("position",String.valueOf(position));
-                Log.d("positionad",String.valueOf(holder.getAdapterPosition()));
+                Log.d("position", String.valueOf(position));
                 holder.spinSelector.setVisibility(View.VISIBLE);
                 holder.orderResult.setVisibility(View.GONE);
                 drink.setSpinnerVisible(View.VISIBLE);
@@ -187,12 +186,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             }
         });
 
+        return convertView;
     }
 
-    @Override
-    public int getItemCount() {
-        return drinkList.size();
-    }
 
     private void startGoogleNow(int position) {
         Intent googleNowIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

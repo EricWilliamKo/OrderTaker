@@ -6,7 +6,6 @@ import android.speech.RecognizerIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,17 +34,19 @@ public class MainActivity extends AppCompatActivity implements CardListener{
 
         initCollapsingToolbar();
 
-        recyclerView = findViewById(R.id.recycler_view);
-//        listView = findViewById(R.id.list_view);
+//        recyclerView = findViewById(R.id.recycler_view);
+        listView = findViewById(R.id.list_view);
 
         drinkList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(this, drinkList,this);
+        orderAdapter = new OrderAdapter(this,this);
+
+        listView.setAdapter(orderAdapter);
 
 
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(orderAdapter);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(orderAdapter);
 
         addOrderCard();
 
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements CardListener{
     public void addOrderCard() {
         Drink drink = new Drink();
 
-        drinkList.add(drink);
-        orderAdapter.notifyDataSetChanged();
+        orderAdapter.add(drink);
+//        orderAdapter.notifyDataSetChanged();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
