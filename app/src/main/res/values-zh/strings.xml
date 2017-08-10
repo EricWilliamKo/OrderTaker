@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drink_name">品名:</string>
+    <string name="ice">冰量:</string>
+    <string name="sugar">甜度:</string>
+</resources>
