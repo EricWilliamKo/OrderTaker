@@ -27,11 +27,11 @@ public abstract class OrderParser {
             public void run() {
                 boolean matched;
                 Matcher matcher;
-                for (String expression_ice : expressions) {
-                    matcher = Pattern.compile(regularize(expression_ice)).matcher(order);
+                for (String expression : expressions) {
+                    matcher = Pattern.compile(regularize(expression)).matcher(order);
                     matched = matcher.find();
                     if (matched) {
-                        setValue(expression_ice);
+                        setValue(expression);
                     }
                 }
             }
