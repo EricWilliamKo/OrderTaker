@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements CardListener{
             for (String match : matches) {
                 Log.i(TAG, "onActivityResult, text:" + match);
                 drink.takeVoiceOrder(match);
+                orderAdapter.notifyDataSetChanged();
             }
         }
     }
