@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">OrderTaker</string>
+    <string name="drink_name">item:</string>
+    <string name="ice">ice:</string>
+    <string name="sugar">sugar:</string>
+    <string name="one_more">One More</string>
+    <string name="checkout">Checkout</string>
+    <string name="confirm">Confirm</string>
 </resources>

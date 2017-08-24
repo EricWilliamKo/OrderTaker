@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.example.eric.ordertaker.Drinks.Drink;
@@ -21,7 +21,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CardListener{
     private RecyclerView recyclerView;
-    private ListView listView;
     private OrderAdapter orderAdapter;
     private List<Drink> drinkList;
     private static final String TAG = "Google Now test";
@@ -36,19 +35,30 @@ public class MainActivity extends AppCompatActivity implements CardListener{
         initCollapsingToolbar();
 
         recyclerView = findViewById(R.id.recycler_view);
-//        listView = findViewById(R.id.list_view);
-
         drinkList = new ArrayList<>();
         orderAdapter = new OrderAdapter(this, drinkList,this);
 
+        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                // callback for drag-n-drop, false to skip this feature
+                return false;
+            }
 
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // callback for swipe to dismiss, removing item from data and adapter
+                removeOrderCard(viewHolder.getAdapterPosition());
+            }
+        });
+
+        swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(orderAdapter);
-
         addOrderCard();
-
         try {
             Glide.with(this).load(R.drawable.logo).into((ImageView) findViewById(R.id.backdrop));
         } catch (Exception e) {
@@ -91,8 +101,14 @@ public class MainActivity extends AppCompatActivity implements CardListener{
 
     public void addOrderCard() {
         Drink drink = new Drink();
-
         drinkList.add(drink);
+        orderAdapter.notifyDataSetChanged();
+    }
+
+    public void removeOrderCard(int position){
+        drinkList.remove(position);
+        Drink drink = drinkList.get(drinkList.size()-1);
+        drink.lastOne = true;
         orderAdapter.notifyDataSetChanged();
     }
 

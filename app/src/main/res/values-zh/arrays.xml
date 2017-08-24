@@ -18,10 +18,11 @@
 
     <string-array name="expression_sugar">
         <item>正常糖</item>
-        <item>無糖</item>
-        <item>微糖</item>
         <item>半糖</item>
         <item>少糖</item>
+        <item>微糖</item>
+        <item>無糖</item>
+        <item>去糖</item>
     </string-array>
 
 

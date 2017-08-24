@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         public Spinner name_value, sugar_value, ice_value;
         public ArrayAdapter<CharSequence> nameAdapter, iceAdapter, sugarAdapter;
         public ImageButton voiceOrder;
-        public Button confirm;
+        public Button oneMore;
         public LinearLayout spinSelector, resultLayout;
         public TextView orderResult;
 
@@ -61,7 +60,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             spinSelector = view.findViewById(R.id.spinselector);
             resultLayout = view.findViewById(R.id.result_layout);
             orderResult = view.findViewById(R.id.order_result);
-            confirm = view.findViewById(R.id.confirm);
+            oneMore = view.findViewById(R.id.one_more);
 
             nameAdapter =
                     ArrayAdapter.createFromResource(context, R.array.expression_name, R.layout.spinner_item);
@@ -82,7 +81,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order_card, parent, false);
-
         return new CardViewHolder(itemView);
     }
 
@@ -109,6 +107,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             holder.spinSelector.setVisibility(drink.spinnerVisible);
             holder.orderResult.setVisibility(drink.resultVisible);
             holder.orderResult.setText(drink.getOrderresult());
+            if(drink.lastOne){
+                holder.oneMore.setText(R.string.one_more);
+            }else {holder.oneMore.setText(R.string.confirm);}
         }
 
         holder.name_value.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -155,21 +156,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             }
         });
 
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
+        holder.oneMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("position",String.valueOf(position));
-                Log.d("positionad",String.valueOf(holder.getAdapterPosition()));
                 holder.spinSelector.setVisibility(View.GONE);
                 String order = drink.getOrderresult();
                 holder.orderResult.setText(order);
                 holder.orderResult.setVisibility(View.VISIBLE);
                 drink.setSpinnerVisible(View.GONE);
                 drink.setResultVisible(View.VISIBLE);
-                Log.d("newCardadded1",String.valueOf(drink.newCardadded));
-                if(drink.newCardadded == false){
+                if(drink.lastOne == true){
                     cardListener.addCard();
-                    drink.cardadded();
+                    drink.lastOne = false;
+                    holder.oneMore.setText(R.string.confirm);
                 }
 
             }
@@ -178,8 +177,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         holder.resultLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("position",String.valueOf(position));
-                Log.d("positionad",String.valueOf(holder.getAdapterPosition()));
                 holder.spinSelector.setVisibility(View.VISIBLE);
                 holder.orderResult.setVisibility(View.GONE);
                 drink.setSpinnerVisible(View.VISIBLE);
@@ -200,7 +197,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         googleNowIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.TAIWAN);
 
         try {
-            Log.d("hey", "google now start");
             ((Activity) context).startActivityForResult(googleNowIntent, position);
         } catch (ActivityNotFoundException a) {
             Toast.makeText(context,

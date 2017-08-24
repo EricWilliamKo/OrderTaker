@@ -17,7 +17,7 @@ public class Drink {
     public Name name;
     public Sugar sugar;
     public Ice ice;
-    public boolean newCardadded = false;
+    public boolean lastOne = true;
     public boolean initStatus = false;
     public int spinnerVisible;
     public int resultVisible;
@@ -52,9 +52,6 @@ public class Drink {
         return result;
     }
 
-    public void cardadded(){
-        newCardadded = true;
-    }
 
     public void setSpinnerVisible(int visibility){
         spinnerVisible = visibility;
