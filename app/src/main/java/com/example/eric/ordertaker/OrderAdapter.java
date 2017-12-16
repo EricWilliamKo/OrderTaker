@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.eric.ordertaker.Drinks.Drink;
 
+import org.json.JSONException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +47,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
         public Spinner name_value, sugar_value, ice_value;
         public ArrayAdapter<CharSequence> nameAdapter, iceAdapter, sugarAdapter;
         public ImageButton voiceOrder;
-        public Button oneMore;
+        public Button oneMore,checkout;
         public LinearLayout spinSelector, resultLayout;
         public TextView orderResult;
 
@@ -61,6 +63,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
             resultLayout = view.findViewById(R.id.result_layout);
             orderResult = view.findViewById(R.id.order_result);
             oneMore = view.findViewById(R.id.one_more);
+            checkout = view.findViewById(R.id.checkout);
+
 
             nameAdapter =
                     ArrayAdapter.createFromResource(context, R.array.expression_name, R.layout.spinner_item);
@@ -171,6 +175,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CardViewHold
                     holder.oneMore.setText(R.string.confirm);
                 }
 
+            }
+        });
+
+        holder.checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    cardListener.checkout();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

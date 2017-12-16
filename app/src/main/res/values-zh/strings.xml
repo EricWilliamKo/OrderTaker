@@ -6,4 +6,8 @@
     <string name="one_more">再一杯</string>
     <string name="checkout">結帳</string>
     <string name="confirm">確認</string>
+    <string name="too_much">一次最多點三杯</string>
+    <string name="sorry">不好意思</string>
+    <string name="response">伺服器回復</string>
+    <string name="error">錯誤</string>
 </resources>

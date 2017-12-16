@@ -6,4 +6,8 @@
     <string name="one_more">One More</string>
     <string name="checkout">Checkout</string>
     <string name="confirm">Confirm</string>
+    <string name="too_much">Three cups is the maximum!!</string>
+    <string name="sorry">Sorry!!</string>
+    <string name="response">Server Response</string>
+    <string name="error">Error!!</string>
 </resources>

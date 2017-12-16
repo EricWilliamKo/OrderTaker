@@ -3,17 +3,38 @@
 
     <string-array name="expression_name">
         <item>請選擇</item>
-        <item>珍珠奶茶</item>
-        <item>珍奶</item>
         <item>紅茶</item>
-        <item>綠茶</item>
+        <item>冬瓜茶</item>
+        <item>冬瓜紅茶</item>
+
+        <item>紅茶加珍珠</item>
+        <item>冬瓜茶加珍珠</item>
+        <item>冬瓜紅茶加珍珠</item>
+    </string-array>
+
+    <string-array name="expression_oral_name">
+        <item>紅茶</item>
+        <item>珍紅</item>
+        <item>紅茶加珍珠</item>
+        <item>珍珠紅茶</item>
+
+        <item>冬瓜茶</item>
+        <item>冬瓜茶加珍珠</item>
+        <item>珍珠冬瓜</item>
+
+        <item>冬瓜紅</item>
+        <item>冬瓜紅加珍珠</item>
+        <item>冬瓜紅茶加珍珠</item>
+        <item>珍珠冬瓜紅</item>
+        <item>珍冬紅</item>
+
     </string-array>
 
     <string-array name="expression_ice">
         <item>正常冰</item>
-        <item>去冰</item>
-        <item>微冰</item>
         <item>少冰</item>
+        <item>微冰</item>
+        <item>去冰</item>
     </string-array>
 
     <string-array name="expression_sugar">

@@ -1,5 +1,6 @@
 package com.example.eric.ordertaker;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -15,6 +16,11 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.eric.ordertaker.Drinks.Drink;
+import com.example.eric.ordertaker.Drinks.DrinkJson;
+import com.example.eric.ordertaker.OrderAPI.OrderAPI;
+import com.example.eric.ordertaker.OrderAPI.OrderList;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +135,40 @@ public class MainActivity extends AppCompatActivity implements CardListener{
                 orderAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void checkout() throws JSONException {
+        if (drinkList.size() <= 3){
+            OrderList orderList = new OrderList();
+            for(Drink drink:drinkList){
+                DrinkJson drinkJson;
+                drinkJson = drink.getJson();
+                orderList.addDrink(drinkJson);
+            }
+            sendOrder(orderList);
+            drinkList.clear();
+            addOrderCard();
+            orderAdapter.notifyDataSetChanged();
+        }else {
+            tooMuchAlert();
+        }
+
+
+    }
+
+    private void tooMuchAlert(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.too_much)
+                .setTitle(R.string.sorry);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void sendOrder(OrderList orderList){
+        OrderAPI orderAPI = new OrderAPI(this);
+        orderAPI.takeOrder(orderList);
     }
 
     @Override
