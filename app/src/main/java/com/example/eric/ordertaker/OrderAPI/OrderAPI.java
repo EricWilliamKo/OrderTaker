@@ -20,7 +20,7 @@ import retrofit2.http.POST;
  */
 
 public class OrderAPI {
-    private static final String BASE_URL = "http://192.168.30.225:8080/";
+    private static final String BASE_URL = "http://192.168.0.100:8080/";
     private static OrderDrink orderService;
     private Activity activity;
 

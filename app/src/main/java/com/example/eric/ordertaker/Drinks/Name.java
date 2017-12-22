@@ -55,9 +55,9 @@ public class Name extends OrderParser{
             return formalname[2];
         }else if (nameIndex > 4 && nameIndex <= 6){
             return formalname[5];
-        }else if (nameIndex == 6){
+        }else if (nameIndex == 7){
             return formalname[3];
-        }else if (nameIndex > 6 && nameIndex <= 11){
+        }else if (nameIndex > 7 && nameIndex <= 11){
             return formalname[6];
         }
         return formalname[0];
